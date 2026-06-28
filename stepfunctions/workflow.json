@@ -1,0 +1,40 @@
+{
+  "Comment": "Vodafone Telecom Workflow",
+
+  "StartAt": "VerifyKYC",
+
+  "States": {
+
+    "VerifyKYC": {
+
+      "Type": "Task",
+
+      "Resource": "arn:aws:lambda:ap-south-1:123456789012:function:VerifyKYC",
+
+      "Next": "AllocateNumber"
+
+    },
+
+    "AllocateNumber": {
+
+      "Type": "Task",
+
+      "Resource": "arn:aws:lambda:ap-south-1:123456789012:function:AllocateNumber",
+
+      "Next": "CreateCustomer"
+
+    },
+
+    "CreateCustomer": {
+
+      "Type": "Task",
+
+      "Resource": "arn:aws:lambda:ap-south-1:123456789012:function:CreateCustomer",
+
+      "End": true
+
+    }
+
+  }
+
+}

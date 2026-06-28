@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+
+Description: Vodafone Serverless Telecom Project
+
+Globals:
+  Function:
+    Runtime: python3.12
+    Timeout: 30
+    MemorySize: 256
+
+Resources:
+
+  RegisterFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: RegisterCustomer
+      Handler: lambda_function.lambda_handler
+      CodeUri: register_lambda/
+
+      Policies:
+        - AmazonS3FullAccess
+        - AmazonSQSFullAccess
+        - CloudWatchLogsFullAccess
+
+      Events:
+        RegisterAPI:
+          Type: Api
+          Properties:
+            Path: /register
+            Method: post
+
+Outputs:
+
+  RegisterApi:
+    Description: Register Customer API
+
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/register"
+
+    VerifyKYCFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    FunctionName: VerifyKYC
+    Runtime: python3.12
+    Handler: lambda_function.lambda_handler
+    CodeUri: verify_kyc/
+
+    AllocateNumberFunction:
+  Type: AWS::Serverless::Function
+  Properties:
+    FunctionName: AllocateNumber
+    Runtime: nodejs20.x
+    Handler: index.handler
+    CodeUri: allocate_number/
